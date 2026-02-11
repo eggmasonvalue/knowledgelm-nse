@@ -56,7 +56,7 @@ Convert to `YYYY-MM-DD` for CLI.
 
 ### 2. Download Filings
 
-Use `knowledgelm download` with appropriate flags. Files save to `./{SYMBOL}_knowledgeLM/`.
+Use `knowledgelm download` with appropriate flags. Files save to `./{SYMBOL}_filings/`.
 
 ### 3. List Files (if needed)
 
@@ -111,9 +111,27 @@ If your AI agent uses a different skills directory, copy the installed skill the
 
 Use the notebooklm skill to create notebook and add downloaded files as sources (exclude `.pkl` files).
 
-**Optional - Audio Overview Generation:**
 
+## 5. Highly likely add-on - Valuepickr forum as a source
+
+- Use `web_search` to find the company's thread URL on `forum.valuepickr.com`.
+- Run `knowledgelm forum <URL> --symbol <SYMBOL>`. Files saved to `./{SYMBOL}_valuepickr/`. 
+- **Artifacts:** 1. thread  2. popular links in the thread in a .md
+- **Constraint**: Do not run by default. Warn the user that this is a forum thread and may not fit as an upload to notebookLM as a source of truth. However, the output is formatted to be distraction-free and print-friendly--will interest most users as a download.
+
+```bash
+knowledgelm forum "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol HDFCBANK
+```
+
+
+## 6. Follow-up:
+
+**Optional - Audio Overview Generation:**
 For generating audio overviews focused on fundamental analysis, use the prompt template at `references/notebooklm_audio_prompt.md` as a system prompt. This provides structured guidance for creating investor-focused audio summaries.
+
+**General:**
+End with a call-to-action illustrating notebooklm's features(use `notebooklm --help` to understand what to offer the user contextually prior to the CTA)
+
 
 ## Exception Handling
 

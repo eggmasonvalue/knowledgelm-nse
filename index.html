@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KnowledgeLM | Industrial</title>
+    <title>KnowledgeLM | NSE Filings -> NotebookLM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -18,9 +18,14 @@
             --bg-panel: #FFFFFF;
             --ink: #111111;
             --ink-light: #555555;
-            --accent: #FF3300;
-            /* International Orange */
+            --accent: #059669;
+            /* Emerald Signal Green */
             --grid-line: #DDDDDD;
+        }
+
+        html {
+            overflow-x: hidden;
+            width: 100vw;
         }
 
         * {
@@ -33,11 +38,17 @@
             background-color: var(--bg-base);
             color: var(--ink);
             font-family: 'Space Grotesk', sans-serif;
-            height: 100vh;
+            height: auto;
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
+            /* Force vertical stacking */
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
+            padding: 4rem 0;
             /* Architectural Grid Background */
             background-image:
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
@@ -47,11 +58,15 @@
 
         /* Abstract Motion - Architectural Lines Passing By */
         .motion-layer {
-            position: absolute;
+            position: fixed;
+            /* Changed from absolute to fixed */
             top: 20%;
             bottom: 20%;
             left: 0;
             width: 200%;
+            will-change: transform;
+            pointer-events: none;
+            z-index: 0;
             background: repeating-linear-gradient(90deg,
                     transparent,
                     transparent 200px,
@@ -65,8 +80,6 @@
                     /* Thicker line */
                 );
             animation: pan-lines 20s linear infinite;
-            pointer-events: none;
-            z-index: 0;
         }
 
         @keyframes pan-lines {
@@ -211,126 +224,13 @@
             font-family: 'IBM Plex Mono';
         }
 
-        /* Mobile */
-        @media (max-width: 850px) {
-            .unit-container {
-                width: 90%;
-                padding: 2rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .data-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .motion-layer {
-                opacity: 0.5;
-            }
+        .code {
+            background: #E0E0E0;
+            padding: 0.1rem 0.3rem;
+            border-radius: 2px;
+            color: var(--ink);
         }
-    </style>
-</head>
 
-<body>
-
-    <div class="motion-layer"></div>
-
-    <div class="unit-container">
-
-        <div class="header-row">
-            <div class="brand-mark">KNOWLEDGELM</div>
-            <div class="status-display">
-                <span>RANDOM WALKING</span>
-                <div class="led"></div>
-            </div>
-        </div>
-
-        <h1>
-            Fundamentals.<br>
-            <span>Frictionless</span>
-        </h1>
-
-        <p class="desc">
-            Talk to Indian publicly listed company filings. Just say the words.
-        </p>
-
-        <div class="cmd-deck" onclick="copyCmd()">
-            <span class="cmd-text">npx skills add eggmasonvalue/knowledgelm-nse</span>
-            <span class="cmd-icon">↓</span>
-        </div>
-
-        <div class="data-grid">
-            <div class="data-item">
-                <span class="d-label">Source</span>
-                <span class="d-val">NSE + CRAs</span>
-            </div>
-            <div class="data-item">
-                <span class="d-label">Scope</span>
-                <span class="d-val">NSE mainboard</span>
-            </div>
-            <div class="data-item">
-                <span class="d-label">Destination</span>
-                <span class="d-val">NotebookLM</span>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- The Demo / Log Section -->
-    <div class="demo-container">
-        <div class="user-prompt">
-            <span class="prompt-marker">USER:</span>
-            <span class="prompt-text">/knowledgelm-nse set up a research notebook for NRB Bearings since COVID
-                onset</span>
-        </div>
-
-        <div class="agent-response">
-            <div class="resp-header">
-                KNOWLEDGELM <span style="opacity:0.3">//</span> EXECUTION LOG
-            </div>
-            <div class="resp-body">
-                <p class="success-msg">Successfully set up research notebook for <span class="highlight">NRB
-                        Bearings</span>.</p>
-
-                <div class="log-section">
-                    <span class="log-label">01. DATA INGESTION</span>
-                    <p>49 filings retrieved starting Jan 30, 2020 (post-COVID onset).</p>
-                    <p class="meta" style="margin-bottom: 0.8rem;">Saved to: <span
-                            class="path">./NRBBEARING_filings</span>
-                    </p>
-                    <ul class="file-list">
-                        <li>Analyst Call Transcripts</li>
-                        <li>Investor Presentations</li>
-                        <li>Credit Ratings (CRISIL/ICRA)</li>
-                        <li>Annual Reports</li>
-                    </ul>
-                </div>
-
-                <div class="log-section">
-                    <span class="log-label">02. NOTEBOOK GENERATION</span>
-                    <p>Created Notebook: <span class="highlight">"NRB Bearings Research - Since COVID"</span></p>
-                    <p class="meta">ID: 233e341c-6720-496e-addc-41a08033111a</p>
-                </div>
-
-                <div class="log-section">
-                    <span class="log-label">03. INTEGRATION</span>
-                    <p>All source PDFs injected into the notebook</p>
-                </div>
-
-                <div class="next-steps">
-                    <p style="margin-bottom: 0.5rem;">> READY for query. Try: <span class="code">/notebooklm ask
-                            "Summarize margin trends"</span></p>
-                    <p>> My skill includes the ability to generate an AUDIO OVERVIEW(Deep Dive) from:<span
-                            class="path">references/audio_prompt.md</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <style>
         /* CSS for the new Demo Section */
         .demo-container {
             width: 800px;
@@ -443,22 +343,130 @@
             font-size: 0.8rem;
         }
 
-        .code {
-            background: #E0E0E0;
-            padding: 0.1rem 0.3rem;
-            border-radius: 2px;
-            color: var(--ink);
-        }
+        /* Mobile */
+        @media (max-width: 850px) {
+            .unit-container {
+                width: 90%;
+                padding: 2rem;
+            }
 
-        /* Tweaks for body flow */
-        body {
-            height: auto;
-            min-height: 100vh;
-            flex-direction: column;
-            padding: 4rem 0;
-            overflow-y: auto;
+            .demo-container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .motion-layer {
+                opacity: 0.5;
+            }
         }
     </style>
+</head>
+
+<body>
+
+    <div class="motion-layer"></div>
+
+    <div class="unit-container">
+
+        <div class="header-row">
+            <div class="brand-mark">KNOWLEDGELM</div>
+            <div class="status-display">
+                <span>RANDOM WALKING</span>
+                <div class="led"></div>
+            </div>
+        </div>
+
+        <h1>
+            Fundamentals.<br>
+            <span>Frictionless</span>
+        </h1>
+
+        <p class="desc">
+            The Agent Skill that feeds Indian public company disclosures to NotebookLM.<br>Speak it into existence
+        </p>
+
+        <div class="cmd-deck" onclick="copyCmd()">
+            <span class="cmd-text">npx skills add eggmasonvalue/knowledgelm-nse</span>
+            <span class="cmd-icon">↓</span>
+        </div>
+
+        <div class="data-grid">
+            <div class="data-item">
+                <span class="d-label">Source</span>
+                <span class="d-val">NSE + CRAs + Forum</span>
+            </div>
+            <div class="data-item">
+                <span class="d-label">Scope</span>
+                <span class="d-val">NSE mainboard</span>
+            </div>
+            <div class="data-item">
+                <span class="d-label">Destination</span>
+                <span class="d-val">NotebookLM</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- The Demo / Log Section -->
+    <div class="demo-container">
+        <div class="user-prompt">
+            <span class="prompt-marker">USER:</span>
+            <span class="prompt-text">/knowledgelm-nse set up a research notebook for NRB Bearings since COVID
+                onset</span>
+        </div>
+
+        <div class="agent-response">
+            <div class="resp-header">
+                KNOWLEDGELM <span style="opacity:0.3">//</span> EXECUTION LOG
+            </div>
+            <div class="resp-body">
+                <p class="success-msg">Successfully set up research notebook for <span class="highlight">NRB
+                        Bearings</span>.</p>
+
+                <div class="log-section">
+                    <span class="log-label">01. DATA INGESTION</span>
+                    <p>49 filings retrieved starting Jan 30, 2020 (post-COVID onset).</p>
+                    <p class="meta" style="margin-bottom: 0.8rem;">Saved to: <span
+                            class="path">./NRBBEARING_filings</span>
+                    </p>
+                    <ul class="file-list">
+                        <li>Analyst Call Transcripts</li>
+                        <li>Investor Presentations</li>
+                        <li>Credit Ratings (CRISIL/ICRA)</li>
+                        <li>Annual Reports</li>
+                        <li>ValuePickr Threads</li>
+                    </ul>
+                </div>
+
+                <div class="log-section">
+                    <span class="log-label">02. NOTEBOOK GENERATION</span>
+                    <p>Created Notebook: <span class="highlight">"NRB Bearings Research - Since COVID"</span></p>
+                    <p class="meta">ID: 233e341c-6720-496e-addc-41a08033111a</p>
+                </div>
+
+                <div class="log-section">
+                    <span class="log-label">03. INTEGRATION</span>
+                    <p>All source PDFs injected into the notebook</p>
+                </div>
+
+                <div class="next-steps">
+                    <p style="margin-bottom: 0.5rem;">> READY for query. Try: <span class="code">/notebooklm ask
+                            "Summarize margin trends"</span></p>
+                    <p>> My skill includes the ability to generate an <span class="path">AUDIO OVERVIEW(Deep
+                            Dive)</span> tailored to an investor.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function copyCmd() {
