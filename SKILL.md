@@ -8,7 +8,7 @@ description: >
   notebooks with company filings, or (4) Analyze NSE-listed company documents.
 metadata:
   author: eggmasonvalue
-  version: 1.0.0
+  version: 1.1.0
   homepage: https://github.com/eggmasonvalue/knowledgelm-nse
 ---
 
@@ -31,12 +31,11 @@ npx skills update
 
 ## Command Discovery
 
-**Use `--help` extensively to discover current options and flags.**
+**Use `--help` extensively to discover options and to determine the next steps**
 
 ```bash
 knowledgelm --help
 knowledgelm download --help
-knowledgelm list-files --help
 ```
 
 ## Core Workflow
@@ -64,7 +63,9 @@ Use `knowledgelm list-files` with `--json` flag to get file paths (excludes `.pk
 
 ## NotebookLM Integration
 
-If user wants to create a NotebookLM notebook:
+**The below is a comprehensive CLI for Google NotebookLM - offers full programmatic access to NotebookLM's features from the command line**
+
+Follow this if the user wants to create a notebook
 
 ### 1. Ensure Latest Package Version
 
@@ -91,47 +92,39 @@ uv tool install --reinstall "notebooklm-py[browser]"
 playwright install chromium
 ```
 
-### 2. Update Skill to Latest Version
+### 2. Create Notebook
 
-**Always run** `notebooklm skill install` to ensure skill is current:
+**Use `--help` extensively to discover options and to determine the next steps**
 
 ```bash
-notebooklm skill install
+notebooklm --help
+notebooklm source add --help
 ```
 
-This installs/updates to the default directory (typically `~/.claude/skills/notebooklm/`).
+Use the notebooklm CLI to create a **new** notebook and add downloaded files to that notebook(exclude `.pkl` files).
 
-**Important:** Do NOT delete this directory - it's used for version tracking.
+## 6. Follow-up:
 
-### 3. Copy to Your Skills Directory (if different)
-
-If your AI agent uses a different skills directory, copy the installed skill there. The install directory path is shown in the `skill install` output.
-
-### 4. Create Notebook
-
-Use the notebooklm skill to create notebook and add downloaded files as sources (exclude `.pkl` files).
-
-
-## 5. Highly likely add-on - Valuepickr forum as a source
+### Highly likely add-on - Valuepickr forum as a source
 
 - Use `web_search` to find the company's thread URL on `forum.valuepickr.com`.
 - Run `knowledgelm forum <URL> --symbol <SYMBOL>`. Files saved to `./{SYMBOL}_valuepickr/`. 
 - **Artifacts:** 1. thread  2. popular links in the thread in a .md
-- **Constraint**: Do not run by default. Warn the user that this is a forum thread and may not fit as an upload to notebookLM as a source of truth. However, the output is formatted to be distraction-free and print-friendly--will interest most users as a download.
+- **Note**:
+  - This is a forum thread and may not fit as an upload to notebookLM as a source of truth. 
+  - The output is well-formatted to be vastly more distraction-free and print-friendly compared to the site.
+
+  Make the user understand both and offer it as just a download or as a potential source
 
 ```bash
-knowledgelm forum "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol HDFCBANK
+knowledgelm forum "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol NRBBEARING
 ```
 
+### Optional - Audio Overview Generation:
+For generating audio overviews focused on fundamental analysis, use the prompt template at `references/notebooklm_audio_prompt.md` as a system prompt to notebookLM. This provides structured guidance for creating investor-focused audio summaries.
 
-## 6. Follow-up:
-
-**Optional - Audio Overview Generation:**
-For generating audio overviews focused on fundamental analysis, use the prompt template at `references/notebooklm_audio_prompt.md` as a system prompt. This provides structured guidance for creating investor-focused audio summaries.
-
-**General:**
-End with a call-to-action illustrating notebooklm's features(use `notebooklm --help` to understand what to offer the user contextually prior to the CTA)
-
+### General:
+End with a call-to-action to help the user benefit further from the available features.
 
 ## Exception Handling
 
