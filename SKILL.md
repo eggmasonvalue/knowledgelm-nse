@@ -2,7 +2,7 @@
 name: knowledgelm-nse
 description: >
   Batch download Indian company filings (transcripts, investor presentations,
-  credit ratings, annual reports) from NSE and valuepickr threads. Optionally add to NotebookLM.
+  credit ratings, annual reports, share issuance documents) from NSE and valuepickr threads. Optionally add to NotebookLM.
   Use when user asks to: (1) Download investor materials for Indian publicly 
   listed companies, (2) Research Indian stocks/companies, (3) Create research 
   notebooks with company filings, or (4) Analyze NSE-listed company documents.
@@ -52,6 +52,10 @@ knowledgelm download --help
 Convert to `YYYY-MM-DD` for CLI.
 
 **Categories:** Default to all categories if not specified. Use `--annual-reports-all` by default.
+
+Available: `transcripts`, `investor_presentations`, `credit_rating`, `annual_reports`, `related_party_txns`, `press_releases`, `issue_documents`
+
+**Share Issuance Documents note:** Use the `issue_documents` when the user asks about docs related to events involving issuance of shares: IPO prospectus, rights issues, QIP placements, information memoranda, or scheme of arrangement documents.
 
 ### 2. Download Filings
 
@@ -118,6 +122,14 @@ Use the notebooklm CLI to create a **new** notebook and add downloaded files to 
 
 ```bash
 knowledgelm forum "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol NRBBEARING
+```
+
+### Add-on - Resignations query
+
+Offer to check KMP resignations and cessations. Returns structured JSON (no files downloaded) — useful as a quick governance signal.
+
+```bash
+knowledgelm resignations SYMBOL --from 2020-01-01 --to 2025-12-31
 ```
 
 ### Optional - Audio Overview Generation:
