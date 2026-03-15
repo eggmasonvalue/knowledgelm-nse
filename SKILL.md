@@ -2,19 +2,21 @@
 name: knowledgelm-nse
 description: >
   Batch download Indian company filings (transcripts, investor presentations,
-  credit ratings, annual reports, share issuance documents) from NSE and valuepickr threads. Optionally add to NotebookLM.
-  Use when user asks to: (1) Download investor materials for Indian publicly 
-  listed companies, (2) Research Indian stocks/companies, (3) Create research 
+  credit ratings, annual reports, share issuance documents, XBRL-parsed personnel
+  changes, key announcements, shareholder meetings) from NSE and valuepickr threads.
+  Convert downloaded PDFs to LLM-ready Markdown. Optionally add to NotebookLM.
+  Use when user asks to: (1) Download investor materials for Indian publicly
+  listed companies, (2) Research Indian stocks/companies, (3) Create research
   notebooks with company filings, or (4) Analyze NSE-listed company documents.
 metadata:
   author: eggmasonvalue
-  version: 1.1.0
+  version: 5.1.0
   homepage: https://github.com/eggmasonvalue/knowledgelm-nse
 ---
 
 # KnowledgeLM NSE
 
-Batch download Indian company filings from NSE and optionally integrate with NotebookLM.
+Batch download Indian company filings from NSE, convert PDFs to Markdown, and optionally integrate with NotebookLM.
 
 ## Installation
 
@@ -35,7 +37,16 @@ npx skills update
 
 ```bash
 knowledgelm --help
-knowledgelm download --help
+knowledgelm fetch nse --help
+```
+
+## CLI Contract
+
+All commands output **strictly formatted JSON** to stdout. Logs, progress bars, and warnings are routed to `knowledgelm.log` to preserve the context window.
+
+```
+Success: {"success": true, ...data...}
+Failure: {"success": false, "error": "<reason>"}
 ```
 
 ## Core Workflow
@@ -51,19 +62,28 @@ knowledgelm download --help
 
 Convert to `YYYY-MM-DD` for CLI.
 
-**Categories:** Default to all categories if not specified. Use `--annual-reports-all` by default.
+**Datasets:** Default to all datasets if not specified. Uses `--annual-reports-all` by default.
 
-Available: `transcripts`, `investor_presentations`, `credit_rating`, `annual_reports`, `related_party_txns`, `press_releases`, `issue_documents`
+Run `knowledgelm list-datasets` to get the full list of valid dataset keys. 
 
-**Share Issuance Documents note:** Use the `issue_documents` when the user asks about docs related to events involving issuance of shares: IPO prospectus, rights issues, QIP placements, information memoranda, or scheme of arrangement documents.
+**Share Issuance Documents note:** Use `issue_documents` when the user asks about docs related to events involving issuance of shares: IPO prospectus, rights issues, QIP placements, information memoranda, or scheme of arrangement documents.
 
-### 2. Download Filings
+**Shareholder Meeting Notices note:** The `shm_details.json` output from the `shm` dataset contains:
+`ixbrl` : links to a human .html file of the details of the meeting and resolutions(subset of the below)
+`local_pdf_path`: .pdf of the notice. Besides all the info in the `ixbrl` .html, the .pdfs provide **explanatory statements** for each resolution. This is an underrated source of insight.
 
-Use `knowledgelm download` with appropriate flags. Files save to `./{SYMBOL}_filings/`.
+### 2. Fetch Filings
 
-### 3. List Files (if needed)
+Use `knowledgelm fetch nse` with appropriate flags. 
 
-Use `knowledgelm list-files` with `--json` flag to get file paths (excludes `.pkl` cookies).
+```bash
+# Fetch all standard categories
+knowledgelm fetch nse HDFCBANK --start 2024-01-01 --end 2025-01-26
+
+# Fetch specific datasets
+knowledgelm fetch nse HDFCBANK --start 2024-01-01 --end 2025-01-26 --datasets transcripts,annual_reports
+```
+The CLI's return .json provides useful metadata about the results.
 
 ## NotebookLM Integration
 
@@ -89,10 +109,12 @@ If installed, upgrade to latest:
 uv tool upgrade notebooklm-py
 ```
 
-**Browser extras (for first-time setup):** If user hasn't authenticated with NotebookLM before, they need browser login support:
+**Browser extras (for first-time setup):** 
+Do not use this unless you run into issues running any of the `notebooklm` commands.
+If user hasn't authenticated with NotebookLM before, they need browser login support:
 
 ```bash
-uv tool install --reinstall "notebooklm-py[browser]"
+uv tool install "notebooklm-py[browser]"
 playwright install chromium
 ```
 
@@ -105,38 +127,47 @@ notebooklm --help
 notebooklm source add --help
 ```
 
-Use the notebooklm CLI to create a **new** notebook and add downloaded files to that notebook(exclude `.pkl` files).
+Use the notebooklm CLI to create a **new** notebook and add all downloaded files(.pdf, .md, .json) to that notebook (exclude `.pkl` files).
 
-## 6. Follow-up:
 
-### Highly likely add-on - Valuepickr forum as a source
+## Follow-up/CTA
+Contextually come up with a call-to-action to help the user benefit from the below add-on features/unused core features.
+
+### Highly likely add-on — ValuePickr forum as a source
 
 - Use `web_search` to find the company's thread URL on `forum.valuepickr.com`.
-- Run `knowledgelm forum <URL> --symbol <SYMBOL>`. Files saved to `./{SYMBOL}_valuepickr/`. 
-- **Artifacts:** 1. thread  2. popular links in the thread in a .md
+- Run `knowledgelm fetch vp <URL> --symbol <SYMBOL>`. Files saved to `./{SYMBOL}_sources/forum_valuepickr/`.
+- **Artifacts:** 1. thread PDF  2. popular links in the thread in a `.md`
 - **Note**:
-  - This is a forum thread and may not fit as an upload to notebookLM as a source of truth. 
+  - This is a forum thread and may not fit as an upload to NotebookLM as a source of truth.
   - The output is well-formatted to be vastly more distraction-free and print-friendly compared to the site.
 
-  Make the user understand both and offer it as just a download or as a potential source
+  Make the user understand both and offer it as just a download for the user to read manually or as a potential source.
 
 ```bash
-knowledgelm forum "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol NRBBEARING
+knowledgelm fetch vp "https://forum.valuepickr.com/t/nrb-bearings-ev-and-exports-to-drive-growth/106674" --symbol NRBBEARING
 ```
 
-### Add-on - Resignations query
+### Optional add-on — Audio Overview Generation
 
-Offer to check KMP resignations and cessations. Returns structured JSON (no files downloaded) — useful as a quick governance signal.
+The [notebooklm_audio_prompt](.\references\notebooklm_audio_prompt.md) can be used to generate a fundamental deep-dive of the company in audio format by passing it as an argument to the corresponding `notebooklm` command. 
+
+### On-demand add-on — Markdown conversion of .pdfs
+
+The `convert` command converts downloaded PDFs to LLM-ready Markdown using `markitdown`.
+
+**Important:** Conversion is deliberately separate from `fetch` because it can take **over 2 minutes per file** for large documents (e.g., annual reports). 
+
+Use when a user wants to analyze an individual source/small subset without using notebookLM/as a fallback for when notebooklm faces persistent issues. Explicitly warn the user regarding the tradeoff beforehand.
+
 
 ```bash
-knowledgelm resignations SYMBOL --from 2020-01-01 --to 2025-12-31
+# Convert a single PDF
+knowledgelm convert file "./HDFCBANK_sources/transcripts/2024-10-19_Transcript.pdf"
+
+# Bulk convert all PDFs in a directory
+knowledgelm convert dir "./HDFCBANK_sources/transcripts/"
 ```
-
-### Optional - Audio Overview Generation:
-For generating audio overviews focused on fundamental analysis, use the prompt template at `references/notebooklm_audio_prompt.md` as a system prompt to notebookLM. This provides structured guidance for creating investor-focused audio summaries.
-
-### General:
-End with a call-to-action to help the user benefit further from the available features.
 
 ## Exception Handling
 
