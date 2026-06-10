@@ -4,13 +4,15 @@ description: >
   Batch download Indian company filings (transcripts, investor presentations,
   credit ratings, annual reports, share issuance documents, XBRL-parsed personnel
   changes, key announcements, shareholder meetings) from NSE and valuepickr threads.
+  Supports resolving industries to stock lists (e.g., getting all cement stocks).
   Convert downloaded PDFs to LLM-ready Markdown. Optionally add to NotebookLM.
   Use when user asks to: (1) Download investor materials for Indian publicly
-  listed companies, (2) Research Indian stocks/companies, (3) Create research
-  notebooks with company filings, or (4) Analyze NSE-listed company documents.
+  listed companies or entire industries (e.g. "cement stocks", "sugar industry"),
+  (2) Research Indian stocks/companies, (3) Create research notebooks with
+  company filings, or (4) Analyze NSE-listed company documents.
 metadata:
   author: eggmasonvalue
-  version: 5.1.0
+  version: 5.2.0
   homepage: https://github.com/eggmasonvalue/knowledgelm-nse
 ---
 
@@ -54,6 +56,30 @@ Failure: {"success": false, "error": "<reason>"}
 ### 1. Gather Required Information
 
 **NSE Symbol:** If not provided, use `web_search` to find it.
+
+**Industry-based / Sector-based Queries:**
+If the user asks for filings, research, or notebooks for stocks belonging to an industry or sector (e.g., "all cement stocks", "sugar industry", "consumer discretionary stocks"):
+- Do NOT search for individual symbols one-by-one online.
+- Do NOT assume a simple keyword query is always sufficient. For broad or hierarchical queries (e.g. "Consumer Discretionary"), the user might want a specific subcategory or sector.
+- Ensure the local cache is updated and obtain its path by running the bundled helper script `scripts/fetch_industry_data.py` (located in this skill's folder, find the path from the system prompt):
+  ```bash
+  python <path_to_skill>/scripts/fetch_industry_data.py
+  ```
+  This returns a JSON with the cached path, e.g., `{"success": true, "cache_path": "<absolute_path_to_cache_json>"}`.
+- Load and parse the cached JSON. The schema is optimized as a fields-values matrix to save space:
+  ```json
+  {
+    "metadata": ["Macro", "Sector", "Industry", "Basic Industry"],
+    "data": {
+      "ABB": ["Industrials", "Capital Goods", "Electrical Equipment", "Heavy Electrical Equipment"],
+      "BAJAJHIND": ["Fast Moving Consumer Goods", "Fast Moving Consumer Goods", "Agricultural Food & other Products", "Sugar"]
+    }
+  }
+  ```
+- Write a custom Python script or one-liner on the fly to load, filter, or aggregate the JSON:
+  - For precise targets (e.g., "cement"), filter symbols where any of the 4 levels match the term case-insensitively.
+  - For broad categories (e.g., "Consumer Discretionary" macro), write a script to extract and list the sub-sectors, industries, or stock counts. Present the hierarchy to the user to clarify their intent (e.g., "Consumer Discretionary has subcategories like Textiles (50 stocks) and Auto Components (40 stocks). Do you want all of them, or a specific subcategory?").
+- Once the list of symbols is finalized/resolved, batch download their filings using `knowledgelm fetch nse <SYMBOL>`.
 
 **Date Range:** If not provided, ask for clarification. Accept various formats:
 - Explicit: `"2023-01-01 to 2025-01-26"`, `"2023 to 2025"`, `"from 2023"`
