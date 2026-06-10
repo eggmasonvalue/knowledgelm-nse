@@ -66,7 +66,7 @@ If the user asks for filings, research, or notebooks for stocks belonging to an 
   python <path_to_skill>/scripts/fetch_industry_data.py
   ```
   This returns a JSON with the cached path, e.g., `{"success": true, "cache_path": "<absolute_path_to_cache_json>"}`.
-- Load and parse the cached JSON. The schema is optimized as a fields-values matrix to save space:
+- The JSON schema is optimized as a fields-values matrix for efficient filtering and aggregation. Example structure:
   ```json
   {
     "metadata": ["Macro", "Sector", "Industry", "Basic Industry"],
@@ -76,7 +76,7 @@ If the user asks for filings, research, or notebooks for stocks belonging to an 
     }
   }
   ```
-- Write a custom Python script or one-liner on the fly to load, filter, or aggregate the JSON:
+- Write a custom script on the fly to load, filter, or aggregate the JSON:
   - For precise targets (e.g., "cement"), filter symbols where any of the 4 levels match the term case-insensitively.
   - For broad categories (e.g., "Consumer Discretionary" macro), write a script to extract and list the sub-sectors, industries, or stock counts. Present the hierarchy to the user to clarify their intent (e.g., "Consumer Discretionary has subcategories like Textiles (50 stocks) and Auto Components (40 stocks). Do you want all of them, or a specific subcategory?").
 - Once the list of symbols is finalized/resolved, batch download their filings using `knowledgelm fetch nse <SYMBOL>`.
