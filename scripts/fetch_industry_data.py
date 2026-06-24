@@ -11,7 +11,7 @@ The cache path is kept at ``~/.stock_industry_map/industry_cache.json`` for
 continuity with prior runs of this skill.
 
 Requires the client to be installed once:
-    pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git@v0.1.0"
+    pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git"
 """
 
 import json
@@ -32,7 +32,7 @@ def main() -> int:
                     "error": (
                         "industry_map_client not installed. Install once with: "
                         'pip install "industry-data-in @ '
-                        'git+https://github.com/eggmasonvalue/stock-industry-map-in.git@v0.1.0"'
+                        'git+https://github.com/eggmasonvalue/stock-industry-map-in.git"'
                     ),
                 }
             )

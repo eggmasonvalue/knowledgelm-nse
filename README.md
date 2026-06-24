@@ -29,7 +29,7 @@ Success output:
 If the shared industry client is missing, install once:
 
 ```bash
-pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git@v0.1.0"
+pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git"
 ```
 
 ## Maintenance docs
