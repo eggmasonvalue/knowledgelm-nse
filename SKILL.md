@@ -70,7 +70,7 @@ If the user asks for filings, research, or notebooks for stocks belonging to an 
   ```
   This returns a JSON with the cached path, e.g., `{"success": true, "cache_path": "<absolute_path_to_cache_json>"}`.
   > One-time setup: the helper uses the shared industry-map client. If it reports `industry_map_client not installed`, run:
-  > `pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git@v0.1.0"`
+  > `pip install "industry-data-in @ git+https://github.com/eggmasonvalue/stock-industry-map-in.git"`
 - The JSON schema is optimized as a fields-values matrix for efficient filtering and aggregation. Example structure:
   ```json
   {
