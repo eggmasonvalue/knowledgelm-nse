@@ -1,5 +1,16 @@
 # DECISIONS
 
+## 2026-06-28 - Reflect unified XBRL announcements in skill docs
+
+Context: KnowledgeLM unified its three XBRL categories (personnel,
+key_announcements, shm) into a single ``xbrl_announcements`` dataset with
+ixbrl HTML links instead of parsed XML.
+Decision: Update SKILL.md to reference the single ``xbrl_announcements``
+dataset and document the ixbrl HTML link as the primary content source.
+Tradeoff: None — this is a documentation change tracking the upstream
+simplification.
+Status: active
+
 ## 2026-06-22 - Keep this repo as a thin consumer of shared industry-map client
 
 Context: Multiple sibling repos needed the same NSE industry-map fetch/cache
