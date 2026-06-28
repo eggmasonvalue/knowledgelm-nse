@@ -2,8 +2,8 @@
 name: knowledgelm-nse
 description: >
   Batch download Indian company filings (transcripts, investor presentations,
-  credit ratings, annual reports, share issuance documents, XBRL-parsed personnel
-  changes, key announcements, shareholder meetings) from NSE and valuepickr threads.
+  credit ratings, annual reports, share issuance documents, XBRL announcements
+  with ixbrl HTML links) from NSE and valuepickr threads.
   Supports resolving industries to stock lists (e.g., getting all cement stocks).
   Convert downloaded PDFs to LLM-ready Markdown. Optionally add to NotebookLM.
   Use when user asks to: (1) Download investor materials for Indian publicly
@@ -99,9 +99,11 @@ Run `knowledgelm list-datasets` to get the full list of valid dataset keys.
 
 **Share Issuance Documents note:** Use `issue_documents` when the user asks about docs related to events involving issuance of shares: IPO prospectus, rights issues, QIP placements, information memoranda, or scheme of arrangement documents.
 
-**Shareholder Meeting Notices note:** The `shm_details.json` output from the `shm` dataset contains:
-`ixbrl` : links to a human .html file of the details of the meeting and resolutions(subset of the below)
-`local_pdf_path`: .pdf of the notice. Besides all the info in the `ixbrl` .html, the .pdfs provide **explanatory statements** for each resolution. This is an underrated source of insight.
+**XBRL Announcements note:** The `xbrl_announcements.json` output contains all XBRL filing types
+(personnel changes, key announcements, shareholder meetings, etc.) in a single file.
+Each record carries an `ixbrl` link to the human-readable inline XBRL HTML page —
+this is the primary source of content. No XML parsing is performed; the ixbrl HTML
+is stable, always available, and LLM-friendly.
 
 ### 2. Fetch Filings
 
