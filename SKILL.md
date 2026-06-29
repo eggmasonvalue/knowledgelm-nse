@@ -99,11 +99,7 @@ Run `knowledgelm list-datasets` to get the full list of valid dataset keys.
 
 **Share Issuance Documents note:** Use `issue_documents` when the user asks about docs related to events involving issuance of shares: IPO prospectus, rights issues, QIP placements, information memoranda, or scheme of arrangement documents.
 
-**XBRL Announcements note:** Output goes to ``xbrl_announcements/``:
-- ``html/`` — downloaded ixbrl HTML files (one per filing, named by date + type + appId)
-- ``xbrl_announcements.json`` — table of contents with metadata and ``local_ixbrl_path``
-  pointing to each downloaded HTML. No XML parsing; the ixbrl HTML is the primary
-  content source — stable, always available, and LLM-friendly.
+**XBRL Announcements note:** Output goes to ``xbrl_announcements/html/`` — downloaded ixbrl HTML files (one per filing, named by date + type + appId). No XML parsing; the ixbrl HTML is the primary content source — stable, always available, and LLM-friendly.
 
 ### 2. Fetch Filings
 

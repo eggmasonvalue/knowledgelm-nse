@@ -1,5 +1,13 @@
 # DECISIONS
 
+## 2026-06-29 - Remove xbrl_announcements.json from skill docs
+
+Context: KnowledgeLM removed the JSON table-of-contents file from XBRL
+announcements output; only the ixbrl HTML downloads are the deliverable.
+Decision: Update SKILL.md to stop referencing ``xbrl_announcements.json``.
+Tradeoff: None — the JSON was unnecessary metadata duplication.
+Status: active
+
 ## 2026-06-28 - Reflect unified XBRL announcements in skill docs
 
 Context: KnowledgeLM unified its three XBRL categories (personnel,
