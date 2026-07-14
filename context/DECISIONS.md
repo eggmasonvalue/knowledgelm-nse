@@ -1,5 +1,18 @@
 # DECISIONS
 
+## 2026-07-14 - Reflect credit_rating .pdf/.html mix in skill docs
+
+Context: `screener-scrape` changed `download_credit_ratings_from_screener` to save
+HTML-only rating rationale sources (CRISIL static pages, India Ratings
+JS-rendered pages) as cleaned `.html` instead of PDF-printing them; native
+rating PDFs (ICRA, CARE) are unchanged.
+Decision: Update SKILL.md to document that `credit_rating/` mixes `.pdf` and
+`.html`, that the `.html` files are already LLM-ready, and that `convert dir`
+safely skips them since it only globs `*.pdf`.
+Tradeoff: None — this is a documentation change tracking the upstream
+behavior change.
+Status: active
+
 ## 2026-06-29 - Remove xbrl_announcements.json from skill docs
 
 Context: KnowledgeLM removed the JSON table-of-contents file from XBRL
