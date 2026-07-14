@@ -101,6 +101,8 @@ Run `knowledgelm list-datasets` to get the full list of valid dataset keys.
 
 **XBRL Announcements note:** Output goes to ``xbrl_announcements/html/`` — downloaded ixbrl HTML files (one per filing, named by date + type + appId). No XML parsing; the ixbrl HTML is the primary content source — stable, always available, and LLM-friendly.
 
+**Credit Rating note:** Output to ``credit_rating/`` mixes native `.pdf` (ICRA, CARE) with cleaned `.html` (CRISIL static pages, India Ratings rendered pages). The `.html` files are already LLM-ready — no PDF-print round trip and no `convert` step needed for them; `knowledgelm convert dir` only touches `*.pdf` and leaves `.html` alone automatically.
+
 ### 2. Fetch Filings
 
 Use `knowledgelm fetch nse` with appropriate flags. 
@@ -183,7 +185,7 @@ The [notebooklm_audio_prompt](.\references\notebooklm_audio_prompt.md) can be us
 
 ### On-demand add-on — Markdown conversion of .pdfs
 
-The `convert` command converts downloaded PDFs to LLM-ready Markdown using `markitdown`.
+The `convert` command converts downloaded PDFs to LLM-ready Markdown using `markitdown`. It only targets `.pdf` files, so pre-converted artifacts like `xbrl_announcements/html/*.html` and `credit_rating/*.html` are already LLM-ready and safely skipped.
 
 **Important:** Conversion is deliberately separate from `fetch` because it can take **over 2 minutes per file** for large documents (e.g., annual reports). 
 
