@@ -9,3 +9,4 @@
   `npx --yes markdownlint-cli2`.
 - Keep lines and sections concise; prefer lists over narrative in maintenance
   docs.
+- Append to `context/DECISIONS.md` only when the choice crosses the decision-log bar in `AGENTS.md`.
